@@ -10,15 +10,25 @@ permissions:
 
 jobs:
   relay:
-    if: ${{ github.event.issue.number == 29 }}
+    if: ${{ github.event.issue.number == 29 || github.event.issue.number == 31 }}
     runs-on: ubuntu-latest
     steps:
-      - name: Relay outbox body to Discussion #28
+      - name: Relay outbox body to mapped Discussion
         env:
           GH_TOKEN: ${{ github.token }}
-          DISCUSSION_ID: D_kwDOT28RTM4Aoi1K
         run: |
+          ISSUE_NUMBER=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
           BODY=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")
+
+          case "$ISSUE_NUMBER" in
+            29) DISCUSSION_ID="D_kwDOT28RTM4Aoi1K" ;;
+            31) DISCUSSION_ID="D_kwDOT28RTM4Aoi2r" ;;
+            *)
+              echo "No discussion mapping for issue #$ISSUE_NUMBER."
+              exit 0
+              ;;
+          esac
+
           if [ -z "$BODY" ]; then
             echo "Outbox body is empty; nothing to relay."
             exit 0
