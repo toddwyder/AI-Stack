@@ -1,0 +1,30 @@
+name: ChatGPT Discussion Relay
+
+on:
+  issues:
+    types: [edited]
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  relay:
+    if: ${{ github.event.issue.number == 29 }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Relay outbox body to Discussion #28
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DISCUSSION_ID: D_kwDOT28RTM4Aoi1K
+        run: |
+          BODY=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")
+          if [ -z "$BODY" ]; then
+            echo "Outbox body is empty; nothing to relay."
+            exit 0
+          fi
+
+          gh api graphql \
+            -f query='mutation($discussionId: ID!, $body: String!) { addDiscussionComment(input: {discussionId: $discussionId, body: $body}) { comment { url } } }' \
+            -f discussionId="$DISCUSSION_ID" \
+            -f body="$BODY"
