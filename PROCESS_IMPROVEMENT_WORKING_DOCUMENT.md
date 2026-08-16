@@ -334,6 +334,17 @@ If UAT exposes a new product preference or previously unstated requirement, that
 
 If UAT shows that an already-agreed requirement was not satisfied after the development process declared the work ready, that is a false-confidence event and may trigger a retrospective.
 
+**Experiment 1 primary failure metric (locked before the trial runs):**
+
+An item is a primary failure if, at the PM/UAT handoff boundary, either:
+
+1. it reaches the PM and an already-agreed acceptance criterion fails at UAT; or
+2. it reaches the PM as ready for UAT, but the PM cannot determine what was established or perform the intended UAT without requesting additional technical evidence or doing forensic investigation the process was supposed to absorb.
+
+This is binary and decided at the moment of handoff — not rationalized afterward, and not overturned even if the underlying fix later turns out to have been correct. A reviewer catching weak evidence or an incomplete implementation *before* it reaches the PM is the process succeeding, not a primary failure — reviewer rejections, retries, rework, repair cycles, cost/quota pressure, and flow are tracked as secondary diagnostic/efficiency measures, not primary-failure inputs.
+
+Per-item primary-failure outcomes are recorded individually. The milestone-level Keep / Adjust / Drop / Continue-observing decision draws on the accumulated primary outcomes plus the secondary measures — one failed item does not by itself mean the whole process is abandoned.
+
 **Minimum viable framework:**
 - existing UAT steps live in the issue;
 - PM performs them on staging;
@@ -723,6 +734,8 @@ Normal Julia feature development remains frozen until the minimum migration requ
 - Independent acceptance-criteria/evidence design and independent verification are foundational parts of the minimum process, not experimental variables.
 - Experiment 1 evaluates the **whole minimum viable process** on real Julia work rather than isolating individual variables.
 - Matt Pocock's skills are adopted for v1; exact usage is determined in the how pass and can be changed if real use shows they do not work.
+- The evidence-literacy baseline experiment (`evidence-literacy-baseline.md`) is retired as Pocock's adoption gate, not merely deprioritized — Pocock does not need to win a separate scored experiment before v1 use. The baseline document is retained as historical/reference evidence only.
+- Experiment 1's primary failure metric is locked at the PM/UAT handoff boundary (see Step 8): an item fails if it reaches the PM and an agreed criterion fails at UAT, or if it reaches the PM as UAT-ready but cannot be validated without extra forensic digging the process should have absorbed. Reviewer-stage catches are not primary failures; they are tracked as secondary diagnostic/efficiency measures.
 - Claude Code is the default first implementation agent.
 - ChatGPT/Codex is the default independent reviewer.
 - GitHub Actions are a hard pre-UAT gate.
