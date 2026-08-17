@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   relay:
-    if: ${{ github.event.issue.number == 29 || github.event.issue.number == 31 || github.event.issue.number == 33 }}
+    if: ${{ github.event.issue.number == 29 || github.event.issue.number == 31 || github.event.issue.number == 33 || github.event.issue.number == 35 }}
     runs-on: ubuntu-latest
     steps:
       - name: Relay outbox body to mapped Discussion
@@ -24,6 +24,7 @@ jobs:
             29) DISCUSSION_ID="D_kwDOT28RTM4Aoi1K" ;;
             31) DISCUSSION_ID="D_kwDOT28RTM4Aoi2r" ;;
             33) DISCUSSION_ID="D_kwDOT28RTM4Aoi4E" ;;
+            35) DISCUSSION_ID="D_kwDOT28RTM4Aoi6G" ;;
             *)
               echo "No discussion mapping for issue #$ISSUE_NUMBER."
               exit 0
