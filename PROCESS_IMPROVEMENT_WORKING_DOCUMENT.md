@@ -493,7 +493,9 @@ Current candidates include:
 - `learning.md` pruning or retrieval layers if it eventually becomes too large;
 - automatic blast-radius tiering of a diff (routing cosmetic vs. flagged-path changes to
   different review intensity) and the pool-discipline routing this would require;
-- explicit per-item spend caps.
+- explicit per-item spend caps;
+- dedicated loop-observability artifact trail (structured, queryable record of each loop
+  run's steps, distinct from GitHub's own issue/PR history).
 
 *(Reconciled from legacy issue AI-Stack#21 "3.1 - Mechanical exit," Discussion #32
 reconciliation pass — a real idea from the earlier Phase-hierarchy plan, deliberately deferred
