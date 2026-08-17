@@ -733,7 +733,13 @@ The current-state read-in found 23 open AI-Stack issues still structured under t
 
 When reconciliation is complete, no old Phase-hierarchy issue should remain open merely as a historical/reference artifact - GitHub's history already preserves that.
 
-**Execution ownership:** this is a judgment-and-evidence task (does the old idea already live in the new document, and where does it go if not), not a three-party design question - it does not require the same Todd/ChatGPT/Claude negotiation as genuine process-design tradeoffs. Todd and Claude decide what to keep, change, or close; Claude Code then executes the changes via script/CLI, consistent with Claude Code being the execution environment for scripted GitHub writes elsewhere in this project. A batch operation across 23 issues gets the same dry-run-before-real-writes gate as other bulk operations - stop and confirm before anything is actually closed.
+**Execution sequence (settled in Discussion #32, including ChatGPT's follow-up refinement):**
+
+1. Todd and Claude reconcile the old Phase issues and decide the disposition of each one's underlying content - this is judgment-and-evidence work, not a three-party design question, and does not require the same Todd/ChatGPT/Claude negotiation as genuine process-design tradeoffs.
+2. Write the settled result into this document/the current backlog structure first - that is the source-of-truth change, and it happens before any old issue is touched.
+3. Produce an explicit mapping as its own artifact: `old issue → new home` or `old issue → superseded, no replacement`. This mapping is what gets verified against, not a memory of what was decided.
+4. Claude Code executes the mechanical GitHub changes via CLI/script, working from the mapping: create/update any needed new items, add superseded pointers, close the old hierarchy issues. The script performs no keep/change/close judgment of its own - every disposition decision must already be explicit in the mapping before the script runs. The script is transport and cleanup only. A dry-run gate precedes any real writes, same as other bulk operations.
+5. Run a post-change verification against the mapping: every old issue accounted for, every retained idea actually present in its intended new home, no old Phase-hierarchy issues left open by accident.
 
 ---
 
@@ -782,7 +788,7 @@ When reconciliation is complete, no old Phase-hierarchy issue should remain open
 - "Julia backlog migrated" means the currently documented defects/specs are in GitHub, not that Julia's full defect inventory is complete; Grand Regression later discovers and logs the rest.
 - Claude is a collaborator in the process-improvement project, and substantive disagreements are reconciled explicitly.
 - AI-Stack's 23 legacy Phase-hierarchy issues are reconciled (content checked against this document, preserved if still relevant, closed as superseded if not) rather than blindly closed or left open as reference; see section 14.
-- Reconciling old-plan content against this document does not require three-party (Todd/ChatGPT/Claude) negotiation - it is a Todd + Claude judgment-and-evidence task, executed by Claude Code via script with a dry-run gate before real writes.
+- Reconciling old-plan content against this document does not require three-party (Todd/ChatGPT/Claude) negotiation - it is a Todd + Claude judgment-and-evidence task. Decisions are recorded as an explicit old-issue-to-new-home mapping before any GitHub write happens; Claude Code then executes purely mechanical changes from that mapping via script with a dry-run gate; a post-change verification against the mapping confirms nothing was missed or left open by accident.
 
 ### Intentionally unresolved
 
