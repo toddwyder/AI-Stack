@@ -129,11 +129,19 @@ The migration to the new process will require changes in **both AI-Stack and Jul
 
 GitHub becomes the authoritative Julia backlog.
 
-The board is intentionally simple:
+The board is intentionally simple at the top level:
 
 **Backlog → Ready → In Process → Done**
 
 Only one item is normally In Process at a time.
+
+**Refinement (2026-08-17, per `ISSUE_40_GSD_CORE_DECISION_REGISTER.md` §2):** Ready and In Process are each tracked as two GitHub Project statuses rather than one opaque bucket, so an item's exact position is always visible without a separate state file:
+
+**Backlog → Specifying → Awaiting approval → Implementing → Verifying → Done**
+
+This is not a different model -- it's the same four-stage gate structure below, made granular enough to fully replace `STATE.md`'s job of tracking "where are we right now." Mapping: **Ready** = *Specifying* (spec being drafted) + *Awaiting approval* (spec complete, waiting on the PM's explicit sign-off before work begins); **In Process** = *Implementing* (Agent building) + *Verifying* (acceptance-to-evidence mapping, UAT, review). Blocked work uses a visible `Blocked` status or label plus a comment naming the blocker, at whichever stage it occurs.
+
+This granularity is intentional, not accidental scope creep: it's what makes `STATE.md` retireable (§10's Julia-project-memory concern is separate and unaffected -- this is about *position* tracking, not durable knowledge), and it keeps `CLAUDE.md`/`AGENTS.md` lean by moving "where things stand" out of an instruction file and into GitHub's own state, consistent with keeping instruction files minimal.
 
 ### Backlog
 
@@ -149,31 +157,35 @@ The **AI-Stack backlog** also serves as a holding place for ideas and hypotheses
 
 AI-Stack backlog items do **not** need to be fully specified. They move toward Ready only when there is a reason to consider implementing them.
 
-### Ready
+### Ready (Specifying → Awaiting approval)
 
 Backlog → Ready is the **product-definition gate**.
 
 The PM owns this gate.
 
-A Ready item contains enough product definition that the development process can work on it without reconstructing product intent from old conversations or inventing product decisions.
+A Ready item contains enough product definition that the development process can work on it without reconstructing product intent from old conversations or inventing product decisions. Per C-F1's Ready-to-pull contract: what's wrong and what "right" looks like, a checkable close-when, and evidence pointers rather than restated data.
 
 Depending on the work, this may include:
 
 - a defined vertical slice;
-- specification;
+- specification (see decision-register §2 -- permanent approved specs live under `specs/`, keyed by GitHub issue number);
 - UI mockup or other UX definition where relevant;
 - important constraints;
 - for a defect, the observed incorrect behavior and expected behavior.
 
 The exact artifact package should remain lightweight until real failures show that Ready is too loose.
 
-### In Process
+An item moves from *Specifying* to *Awaiting approval* when its spec is complete, and to *Implementing* only after the PM's explicit recorded approval (decision-register §2 -- no implementation begins without it, at least initially).
+
+### In Process (Implementing → Verifying)
 
 The PM selects the next item and moves it from Ready to In Process.
 
 That pull is the explicit signal that development begins.
 
 The process does not autonomously prioritize or select product work.
+
+*Verifying* covers acceptance-to-evidence mapping, guided UAT for user-visible changes, and any independent review selected at proposal time.
 
 ### Done
 
@@ -782,7 +794,7 @@ When reconciliation is complete, no old Phase-hierarchy issue should remain open
 - GitHub is the single durable source of truth.
 - GitHub becomes the authoritative Julia backlog.
 - The Julia backlog being migrated consists of defects and specs; the migration mechanism is a how-phase question.
-- Board states are Backlog → Ready → In Process → Done.
+- Board states are Backlog → Ready → In Process → Done, tracked in GitHub Projects as Backlog → Specifying → Awaiting approval → Implementing → Verifying → Done (§4, refined 2026-08-17 to fully replace STATE.md's position-tracking).
 - The AI-Stack backlog may hold half-formed ideas, deferred automation candidates, and process hypotheses without commitment to implement them.
 - PM owns Backlog → Ready.
 - PM chooses what moves Ready → In Process.
