@@ -665,13 +665,16 @@ The Julia backlog being migrated consists of **defects and specs**.
 
 The end state is settled: GitHub Issues/Projects becomes the authoritative Julia backlog.
 
-The migration mechanism is intentionally unresolved. Research the best way to move the existing defects/specs into GitHub, including:
+**Sequencing rule (settled in Discussion #30):** define the destination before choosing the path. Do not select between `to-tickets`, `to-spec`, `bulk_issue_create.py`, or a hybrid until the target artifact is defined. The order is:
 
-- direct/scripted issue creation;
-- using the existing material as input to a `to-spec` process;
-- a hybrid approach.
+1. Complete the current-state read-in so it is known which Julia work is actually still live.
+2. Define the concrete **Ready-to-pull contract** — what a Julia issue/spec must contain to be genuinely Ready to pull into In Process without reconstructing product intent. This is its own next design question, not yet answered; a candidate shape (observed/expected behavior or problem/solution, enough context for independent Step 3 acceptance criteria, explicit source-of-truth pointers rather than restated data) exists as input but is not locked.
+3. Compare `to-spec`, `to-tickets`, `bulk_issue_create.py`, and hybrids only against that target contract — not against each other in the abstract.
+4. Choose the most expedient mechanism that reliably produces the target, reusing existing tooling (e.g. the already-built bulk issue-creation script) where it fits rather than preferring a new mechanism by default.
 
-Any previously built migration tooling reported in earlier work (for example, a bulk issue-creation script) should be verified during the current-state read-in and evaluated as an available mechanism, not assumed to be the final answer.
+Migrate **live/unresolved work only** — not every historical line in `ROADMAP.md`/`CONCERNS.md`. Shipped/resolved/superseded items remain historical evidence in the frozen source documents, not active GitHub backlog. Backlog and Ready remain distinct states, so migration does not require every item to be fully refined immediately — only items approaching Ready need to meet the Ready-to-pull contract.
+
+Any previously built migration tooling reported in earlier work (for example, a bulk issue-creation script) should be verified during the current-state read-in and evaluated against the Ready-to-pull contract once defined, not assumed to be the final answer.
 
 #### G. Julia data-integrity safety control
 
@@ -768,7 +771,7 @@ Normal Julia feature development remains frozen until the minimum migration requ
 
 - actual current state of AI-Stack and Julia, pending the PM current-state read-in;
 - exact Pocock skill usage/integration;
-- exact Julia backlog migration method: script, `to-spec`, or hybrid;
+- the concrete Ready-to-pull contract for migrated Julia items (Discussion #30 deferred this as its own design question);
 - whether previously reported migration tooling remains useful after current-state verification;
 - exact Claude/Codex plugin or invocation mechanism;
 - exact two-harness architecture;
