@@ -563,6 +563,27 @@ V1 does **not** require automatic Claude↔Codex orchestration. The minimum acce
 
 The exact plugin, context-passing mechanism, permissions, and invocation architecture remain research items.
 
+### Harness interruption / checkpoint recovery (settled in Discussion #34)
+
+Extended harness unavailability on the one In Process item (e.g. Claude quota exhaustion for days) is a real, expected scenario given this project's two-harness arrangement - not a hypothetical edge case.
+
+**Governing rule:** on a harness interruption, resume from the **last completed, durable process checkpoint** - never from the interrupted harness's partial work or inferred scratchpad state. Do not spend effort reconstructing what the previous harness was doing or thinking when it stopped; redo the interrupted step from the last trustworthy checkpoint instead.
+
+Reconstructing in-progress state (uncommitted edits, an agent's partial reasoning, a not-yet-passing refactor) from artifacts is itself an unverified inference. Trusting a plausible-looking reconstruction risks the same false-confidence failure mode this whole process exists to prevent. Redoing the interrupted step is bounded and safe; a bad reconstruction is unbounded risk discovered later, when it costs more to unwind. This is consistent with never degrading a validated process to save compute - rationing throughput instead.
+
+Applied per step:
+
+- **Interrupted planning:** redo planning from the last durable input/checkpoint.
+- **Interrupted implementation/execution:** return to the last known-good code/process state and redo the interrupted execution step.
+- **Interrupted automated checks:** rerun the incomplete check set rather than infer what finished.
+- **Interrupted independent verification:** redo verification fresh from its authoritative inputs. The independent-verification exclusion still applies per item: a harness that participated in implementation of an item is not independent for verifying that same item (this restriction is per-item, not permanent - implementing item A does not disqualify a harness from independently reviewing item B later).
+- **Interrupted deployment/recovery:** establish the last known deployment/production checkpoint from durable evidence, then redo the incomplete operation safely - never infer where deployment got to from the predecessor's narrative alone.
+- **Interrupted UAT:** UAT belongs to the PM; resume from the last clearly recorded completed UAT point. If there is ambiguity about whether a check completed, rerun it rather than assume.
+
+**The GitHub item stays In Process throughout an interruption and recovery.** Ready describes product-definition readiness, not execution progress - an interruption does not make the requirement less ready, so the item does not revert to Ready. WIP=1 is preserved: this changes who is working the item, not how many items are active.
+
+No arbitrary time threshold defines "extended" - it means long enough that waiting materially blocks work, with the PM deciding whether to reassign the acting harness or simply wait.
+
 ---
 
 ## 12. Three-party project collaboration
@@ -789,6 +810,7 @@ When reconciliation is complete, no old Phase-hierarchy issue should remain open
 - Claude is a collaborator in the process-improvement project, and substantive disagreements are reconciled explicitly.
 - AI-Stack's 23 legacy Phase-hierarchy issues are reconciled (content checked against this document, preserved if still relevant, closed as superseded if not) rather than blindly closed or left open as reference; see section 14.
 - Reconciling old-plan content against this document does not require three-party (Todd/ChatGPT/Claude) negotiation - it is a Todd + Claude judgment-and-evidence task. Decisions are recorded as an explicit old-issue-to-new-home mapping before any GitHub write happens; Claude Code then executes purely mechanical changes from that mapping via script with a dry-run gate; a post-change verification against the mapping confirms nothing was missed or left open by accident.
+- On harness interruption (e.g. extended quota exhaustion), resume from the last completed durable checkpoint and redo the interrupted step - never reconstruct or trust the interrupted harness's partial/scratchpad state. The In Process item does not revert to Ready; see section 11.
 
 ### Intentionally unresolved
 
