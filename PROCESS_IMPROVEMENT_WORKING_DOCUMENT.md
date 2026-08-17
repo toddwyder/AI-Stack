@@ -490,7 +490,16 @@ Current candidates include:
 - more sophisticated orchestration;
 - multi-item/concurrent workflow support;
 - loops/graphs/agent swarms;
-- `learning.md` pruning or retrieval layers if it eventually becomes too large.
+- `learning.md` pruning or retrieval layers if it eventually becomes too large;
+- automatic blast-radius tiering of a diff (routing cosmetic vs. flagged-path changes to
+  different review intensity) and the pool-discipline routing this would require;
+- explicit per-item spend caps.
+
+*(Reconciled from legacy issue AI-Stack#21 "3.1 - Mechanical exit," Discussion #32
+reconciliation pass — a real idea from the earlier Phase-hierarchy plan, deliberately deferred
+rather than dropped. Consistent with §2's evolutionary-improvement principle: this is
+automated risk-tiering machinery built ahead of observed need, exactly what v1 is meant to
+avoid until real reviewer bottlenecking on trivial changes justifies it.)*
 
 These are backlog ideas, not commitments.
 
