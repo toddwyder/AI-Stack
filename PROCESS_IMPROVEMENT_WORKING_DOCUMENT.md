@@ -720,6 +720,21 @@ Whether related issues are grouped into one milestone or several is an implement
 
 Normal Julia feature development remains frozen until the minimum migration required to run the **whole end-to-end process** is complete. Julia is then the real-work proving ground for that process. We do not reopen Julia piecemeal merely to prove individual AI-Stack artifacts.
 
+### Reconciling AI-Stack's legacy Phase-hierarchy issues (settled in Discussion #32)
+
+The current-state read-in found 23 open AI-Stack issues still structured under the retired Phase → decimal → lettered sub-issue hierarchy (Phase 0-5, e.g. `0.1`, `1.1`, sub-issues `0.1a/b/c`). These are the old plan's residue, not current backlog.
+
+**Reconciliation rule:** do not blindly close them (risks losing still-relevant ideas - CI gates, regression protection, staging, Pocock skills, independent review, observability, spend controls, GSD audit/removal, grand regression) and do not leave them open as reference (violates one-source-of-truth and leaves two competing plans visible on GitHub). Instead, for each old issue:
+
+1. Check whether its underlying idea is already represented in this document.
+2. If not, decide whether the surviving idea belongs in the new migration plan, the AI-Stack backlog as a deferred idea, or nowhere (obsolete/superseded).
+3. Preserve any still-useful content in its correct new home.
+4. Close the old issue as superseded, with a pointer to where its content went (or noting it was obsolete).
+
+When reconciliation is complete, no old Phase-hierarchy issue should remain open merely as a historical/reference artifact - GitHub's history already preserves that.
+
+**Execution ownership:** this is a judgment-and-evidence task (does the old idea already live in the new document, and where does it go if not), not a three-party design question - it does not require the same Todd/ChatGPT/Claude negotiation as genuine process-design tradeoffs. Todd and Claude decide what to keep, change, or close; Claude Code then executes the changes via script/CLI, consistent with Claude Code being the execution environment for scripted GitHub writes elsewhere in this project. A batch operation across 23 issues gets the same dry-run-before-real-writes gate as other bulk operations - stop and confirm before anything is actually closed.
+
 ---
 
 ## 15. What is settled versus intentionally unresolved
@@ -766,6 +781,8 @@ Normal Julia feature development remains frozen until the minimum migration requ
 - Grand Regression is a PM-led full-Julia defect-discovery pass performed after the minimum new process is operational; it is not a regression-test suite or global AI-Stack capability.
 - "Julia backlog migrated" means the currently documented defects/specs are in GitHub, not that Julia's full defect inventory is complete; Grand Regression later discovers and logs the rest.
 - Claude is a collaborator in the process-improvement project, and substantive disagreements are reconciled explicitly.
+- AI-Stack's 23 legacy Phase-hierarchy issues are reconciled (content checked against this document, preserved if still relevant, closed as superseded if not) rather than blindly closed or left open as reference; see section 14.
+- Reconciling old-plan content against this document does not require three-party (Todd/ChatGPT/Claude) negotiation - it is a Todd + Claude judgment-and-evidence task, executed by Claude Code via script with a dry-run gate before real writes.
 
 ### Intentionally unresolved
 
